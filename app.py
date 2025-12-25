@@ -7,11 +7,11 @@ import os
 st.set_page_config(
     page_title="Asisten Museum Batik",
     page_icon="🏛️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# --- API KEY ---
-# Key dimasukkan langsung agar chatbot otomatis berjalan
+# --- API KEY (Ganti jika perlu) ---
 GROQ_API_KEY = "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"
 
 # --- FUNGSI LOAD DATA ---
@@ -19,90 +19,148 @@ GROQ_API_KEY = "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"
 def load_data():
     file_path = 'dataset_museum_batik.json'
     if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
-            return json.load(f)
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            st.error(f"Error membaca file JSON: {e}")
+            return None
     return None
 
 museum_data = load_data()
 
-# --- SIDEBAR (INFORMASI) ---
+# --- SIDEBAR: INFORMASI UTAMA (Disesuaikan dengan Dataset Baru) ---
 with st.sidebar:
-    st.header("🏛️ Info Museum")
+    # Menggunakan Logo Default atau Gambar Batik
+    st.image("https://cdn-icons-png.flaticon.com/512/1909/1909704.png", width=80)
     
     if museum_data:
-        st.subheader("📍 Lokasi")
-        st.write(museum_data['informasi_umum']['lokasi']['alamat'])
+        # Mengambil data dari struktur JSON baru yang bersarang
+        info_identitas = museum_data.get('informasi_umum', {}).get('identitas', {})
+        lokasi = info_identitas.get('lokasi', {})
+        jam = museum_data.get('jam_operasional', {})
+        tiket = museum_data.get('harga_tiket', {})
+        
+        # Judul Nama Museum
+        nama_museum = info_identitas.get('nama', "Museum Batik")
+        st.header(nama_museum)
+        st.caption(f"Est. {info_identitas.get('tahun_pendirian', '-')}")
         
         st.divider()
-        
-        st.subheader("🎫 Harga Tiket")
-        st.write(f"**Dewasa:** Rp{museum_data['harga_tiket']['dewasa']:,}")
-        st.write(f"**Pelajar:** Rp{museum_data['harga_tiket']['pelajar_mahasiswa']:,}")
-        st.write(f"**Mancanegara:** Rp{museum_data['harga_tiket']['wisatawan_mancanegara']:,}")
-    else:
-        st.warning("Data museum tidak ditemukan.")
 
-    st.divider()
-    st.caption("Asisten Virtual Museum Batik Indonesia")
+        # 1. Lokasi
+        st.subheader("📍 Lokasi")
+        alamat_lengkap = f"{lokasi.get('alamat')}, {lokasi.get('kota')}"
+        st.write(alamat_lengkap)
+        
+        # 2. Jam Buka
+        with st.expander("⏰ Jam Operasional"):
+            st.write(f"**Senin-Jumat:** {jam.get('hari_biasa', '-')}")
+            st.write(f"**Akhir Pekan:** {jam.get('akhir_pekan', '-')}")
+            st.caption(jam.get('hari_libur', ''))
+
+        # 3. Tiket
+        with st.expander("🎫 Harga Tiket"):
+            if 'dewasa' in tiket:
+                st.write(f"**Dewasa:** Rp{tiket['dewasa']:,}")
+            if 'pelajar_mahasiswa' in tiket:
+                st.write(f"**Pelajar:** Rp{tiket['pelajar_mahasiswa']:,}")
+            if 'wisatawan_mancanegara' in tiket:
+                st.write(f"**Asing:** Rp{tiket['wisatawan_mancanegara']:,}")
+            st.caption(f"Info: {tiket.get('kebijakan_refund', '-')}")
+            
+        # 4. Kontak Media Sosial
+        st.divider()
+        sosmed = info_identitas.get('media_sosial', {})
+        st.markdown(f"[Instagram]({sosmed.get('instagram', '#')}) | [Website]({info_identitas.get('kontak', {}).get('website', '#')})")
+
+    else:
+        st.warning("⚠️ Data JSON belum dimuat dengan benar.")
+        st.stop()
 
 # --- HALAMAN UTAMA ---
-st.title("Asisten Virtual Museum Batik")
-st.write("Selamat datang! Silakan tanyakan informasi seputar koleksi batik, harga tiket, atau jadwal workshop.")
+st.title("🎨 Asisten Virtual Museum Batik")
+st.markdown(
+    """
+    <style>
+    .stChatMessage {border-radius: 10px;}
+    </style>
+    Selamat datang! Tanyakan tentang **koleksi motif**, **sejarah**, **rute kunjungan**, atau **jadwal workshop**.
+    """, 
+    unsafe_allow_html=True
+)
+st.divider()
 
-# Cek Data
-if not museum_data:
-    st.error("⚠️ File 'dataset_museum_batik.json' belum diunggah ke GitHub.")
+# Inisialisasi Klien Groq
+try:
+    client = Groq(api_key=GROQ_API_KEY)
+except Exception as e:
+    st.error(f"Error API Key: {e}")
     st.stop()
 
-# Inisialisasi Client Groq
-client = Groq(api_key=GROQ_API_KEY)
-
-# --- LOGIKA CHATBOT ---
+# Inisialisasi Riwayat Chat
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Halo! Ada yang bisa saya bantu terkait Museum Batik hari ini?"}
+        {"role": "assistant", "content": "Halo! Saya siap memandu Anda. Apakah Anda ingin rekomendasi rute kunjungan atau info tentang motif batik tertentu?"}
     ]
 
-# Menampilkan Riwayat Chat
+# Tampilkan Riwayat
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
+    avatar = "👤" if message["role"] == "user" else "🤖"
+    with st.chat_message(message["role"], avatar=avatar):
         st.markdown(message["content"])
 
-# Input Chat User
-if prompt := st.chat_input("Ketik pertanyaan Anda di sini..."):
-    # Simpan & Tampilkan Pesan User
+# --- LOGIKA CHAT ---
+if prompt := st.chat_input("Contoh: Buatkan rute kunjungan 1 jam..."):
+    # Simpan & Tampilkan Input User
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # Context untuk AI
+    # Context Data (Konversi JSON ke String)
+    data_str = json.dumps(museum_data, ensure_ascii=False)
+
+    # System Prompt yang dioptimalkan untuk struktur baru
     system_prompt = f"""
-    Anda adalah asisten AI untuk Museum Batik Indonesia.
-    Tugas Anda adalah menjawab pertanyaan pengunjung dengan ramah dan akurat.
+    Anda adalah Pemandu Cerdas Museum Batik Indonesia.
+    Gunakan data JSON berikut untuk menjawab pertanyaan pengunjung:
+    {data_str}
+
+    PANDUAN MENJAWAB:
+    1. **Identitas & Lokasi**: Ambil dari bagian 'informasi_umum' -> 'identitas'.
+    2. **Tiket & Jam**: Ambil dari 'harga_tiket' dan 'jam_operasional'.
+    3. **Koleksi & Motif**: Jika ditanya motif (misal: Parang, Mega Mendung), cari detailnya di array 'koleksi_motif'. Jelaskan filosofi dan asalnya.
+    4. **Rute Kunjungan**: Jika pengunjung bingung mau lihat apa, tawarkan opsi dari bagian 'rute_kunjungan' (misal: Rute Kilat 30 Menit atau Rute Edukasi).
+    5. **Teknik**: Jelaskan detail dari bagian 'teknik_pembuatan'.
     
-    Gunakan data berikut sebagai referensi utama:
-    {json.dumps(museum_data)}
-    
-    Jika pertanyaan di luar konteks museum atau batik, jawablah dengan sopan bahwa Anda hanya melayani informasi seputar museum.
+    Gaya bahasa: Ramah, edukatif, dan membantu. Gunakan format Rupiah (Rp) untuk harga.
+    Jika data tidak ada di JSON, katakan "Maaf informasi tersebut belum tersedia di database museum kami."
     """
     
-    try:
-        # Request ke Groq (Llama 3)
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7
-        )
+    # Generate Jawaban
+    with st.chat_message("assistant", avatar="🤖"):
+        message_placeholder = st.empty()
+        full_response = ""
         
-        response_text = completion.choices[0].message.content
-        
-        # Simpan & Tampilkan Respon AI
-        with st.chat_message("assistant"):
-            st.markdown(response_text)
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
+        try:
+            stream = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    *st.session_state.messages[-5:] # Membawa konteks 5 chat terakhir
+                ],
+                temperature=0.5,
+                stream=True
+            )
             
-    except Exception as e:
-        st.error(f"Terjadi kesalahan koneksi: {e}")
+            for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    full_response += content
+                    message_placeholder.markdown(full_response + "▌")
+            
+            message_placeholder.markdown(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
+            
+        except Exception as e:
+            st.error(f"Terjadi kesalahan koneksi: {e}")
