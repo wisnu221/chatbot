@@ -5,83 +5,89 @@ import os
 
 # --- KONFIGURASI HALAMAN ---
 st.set_page_config(
-    page_title="Museum Batik: Nuansa Alam",
-    page_icon="🌿",
+    page_title="Asisten Museum Batik",
+    page_icon="👑",
     layout="wide"
 )
 
-# --- API KEY (Hardcoded sesuai request) ---
+# --- API KEY (Hardcoded) ---
 GROQ_API_KEY = "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"
 
-# --- CUSTOM CSS (TEMA COKLAT & HIJAU) ---
+# --- CUSTOM CSS (TEMA PREMIUM) ---
 st.markdown("""
     <style>
-    /* 1. Latar Belakang Utama (Krem Kehijauan lembut) */
+    /* 1. Latar Belakang Utama (Ivory/Putih Gading) - Bersih & Terang */
     .stApp {
-        background-color: #f1f8e9; 
-        color: #3e2723; /* Teks Cokelat Tua */
+        background-color: #fbf7f5;
+        color: #2b2b2b;
     }
 
-    /* 2. Sidebar (Hijau Tua Alami) */
+    /* 2. Sidebar (Cokelat Tua Mewah) */
     [data-testid="stSidebar"] {
-        background-color: #33691e; /* Hijau Daun Tua */
-        color: white;
+        background-color: #3e2723;
+        border-right: 1px solid #d7ccc8;
     }
     
-    /* Teks di Sidebar (Putih Gading) */
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] span, [data-testid="stSidebar"] p {
-        color: #f1f8e9 !important;
-        font-family: 'Segoe UI', sans-serif;
+    /* Teks Sidebar */
+    [data-testid="stSidebar"] * {
+        color: #ffecb3 !important; /* Warna Emas Pucat */
+    }
+    [data-testid="stSidebar"] hr {
+        border-color: #8d6e63;
     }
 
-    /* 3. Judul Utama (Cokelat Kayu) */
+    /* 3. Judul Utama */
     h1 {
-        color: #4e342e;
-        font-family: 'Georgia', serif;
+        font-family: 'Playfair Display', serif;
+        color: #3e2723;
         text-align: center;
-        border-bottom: 3px solid #558b2f; /* Garis Bawah Hijau */
-        padding-bottom: 15px;
+        font-weight: 700;
+        margin-bottom: 30px;
     }
-    
-    /* Subjudul */
     h3 {
-        color: #558b2f; /* Hijau Cerah */
+        font-family: 'Playfair Display', serif;
+        color: #5d4037;
     }
 
-    /* 4. Chat Bubbles (Balon Percakapan) */
+    /* 4. Chat Bubbles (Perbaikan Kontras) */
     
-    /* User (Hijau Muda Segar) */
+    /* USER: Cokelat Elegan (Teks Putih) */
     .stChatMessage[data-testid="stChatMessageUser"] {
-        background-color: #dcedc8;
-        border: 1px solid #aed581;
-        border-radius: 20px 20px 0px 20px;
+        background-color: #5d4037;
+        color: #ffffff;
+        border-radius: 20px 20px 5px 20px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    /* Paksa teks user jadi putih */
+    .stChatMessage[data-testid="stChatMessageUser"] p {
+        color: #ffffff !important;
     }
     
-    /* Assistant (Cokelat Muda Hangat) */
+    /* ASSISTANT: Putih Bersih (Teks Hitam) */
     .stChatMessage[data-testid="stChatMessageAssistant"] {
-        background-color: #efebe9;
+        background-color: #ffffff;
         border: 1px solid #d7ccc8;
-        border-radius: 20px 20px 20px 0px;
+        border-radius: 20px 20px 20px 5px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    }
+    .stChatMessage[data-testid="stChatMessageAssistant"] p {
+        color: #3e2723 !important;
     }
 
-    /* 5. Tombol Input & Send */
-    .stButton>button {
-        background-color: #4e342e; /* Tombol Cokelat */
-        color: white;
-        border-radius: 8px;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #6d4c41; /* Cokelat lebih terang saat hover */
+    /* 5. Input Field */
+    .stTextInput > div > div > input {
+        border-radius: 25px;
+        border: 1px solid #8d6e63;
+        padding: 10px 20px;
     }
     
-    /* 6. Info Box/Expander */
-    .streamlit-expanderHeader {
-        background-color: #c5e1a5; /* Hijau Pastel */
-        color: #33691e;
-        border-radius: 5px;
+    /* 6. Fix Glitch Icon Panah */
+    .material-icons {
+        display: none !important; /* Menyembunyikan teks icon yang bocor */
     }
     </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     """, unsafe_allow_html=True)
 
 # --- LOAD DATASET ---
@@ -94,71 +100,19 @@ def load_data():
 
 museum_data = load_data()
 
-# --- SIDEBAR (INFO MUSEUM) ---
+# --- SIDEBAR ---
 with st.sidebar:
-    st.title("🌿 Museum Info")
+    st.title("🏛️ Info Museum")
     st.markdown("---")
     
     if museum_data:
-        st.subheader("📍 Lokasi")
+        st.subheader("📍 Alamat")
         st.caption(museum_data['informasi_umum']['lokasi']['alamat'])
         
-        st.markdown("---")
+        st.markdown("<br>", unsafe_allow_html=True)
         
-        with st.expander("🎫 Tiket Masuk", expanded=True):
-            st.markdown(f"**Dewasa:** \nRp{museum_data['harga_tiket']['dewasa']:,}")
-            st.markdown(f"**Pelajar:** \nRp{museum_data['harga_tiket']['pelajar_mahasiswa']:,}")
-            st.markdown(f"**Asing:** \nRp{museum_data['harga_tiket']['wisatawan_mancanegara']:,}")
-        
-        st.markdown("---")
-        st.info("💡 **Tips:** Tanyakan tentang 'Motif Semen' atau 'Batik Pesisir'.")
-
-# --- MAIN PAGE ---
-st.title("Asisten Batik Nusantara")
-st.markdown("<div style='text-align: center;'><em>Menjelajahi Keindahan Warisan Budaya dengan Nuansa Alam</em></div>", unsafe_allow_html=True)
-st.divider()
-
-if not museum_data:
-    st.error("⚠️ Data museum tidak ditemukan. Mohon cek file JSON di GitHub.")
-    st.stop()
-
-# --- LOGIKA CHATBOT ---
-client = Groq(api_key=GROQ_API_KEY)
-
-if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Halo! Saya siap menemani Anda menjelajahi dunia Batik. Ada yang ingin ditanyakan?"}
-    ]
-
-# Render Chat
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# Input User
-if prompt := st.chat_input("Tulis pertanyaan Anda di sini..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    # Prompt System
-    system_prompt = f"""
-    Anda adalah pemandu museum yang ramah dan mencintai budaya.
-    Jawablah pertanyaan berdasarkan data berikut: {json.dumps(museum_data)}
-    Gunakan bahasa yang santai namun sopan.
-    """
-    
-    try:
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ],
-        )
-        response_text = completion.choices[0].message.content
-        with st.chat_message("assistant"):
-            st.markdown(response_text)
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
-    except Exception as e:
-        st.error(f"Koneksi terputus: {e}")
+        # Expander tanpa glitch
+        with st.expander("🎫 Harga Tiket", expanded=True):
+            st.markdown(f"""
+            - **Dewasa**: Rp{museum_data['harga_tiket']['dewasa']:,}
+            - **Pelajar**: Rp{museum_data['
