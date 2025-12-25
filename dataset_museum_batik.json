@@ -1,197 +1,173 @@
 {
   "informasi_umum": {
-    "nama_museum": "Museum Batik Indonesia",
-    "deskripsi": "Museum Batik Indonesia adalah pusat pelestarian, edukasi, dan dokumentasi batik Nusantara sebagai warisan budaya takbenda Indonesia yang diakui UNESCO.",
-    "lokasi": {
-      "alamat": "Kota Pekalongan, Jawa Tengah",
-      "provinsi": "Jawa Tengah",
-      "negara": "Indonesia",
-      "koordinat": "-6.8895, 109.6753"
+    "identitas": {
+      "nama": "Museum Batik Indonesia",
+      "sejarah_singkat": "Museum Batik Indonesia didirikan sebagai tindak lanjut pengakuan UNESCO terhadap Batik Indonesia sebagai Warisan Budaya Takbenda Manusia pada tahun 2009. Museum ini bertujuan melestarikan, mendokumentasikan, dan memamerkan kekayaan batik Nusantara.",
+      "lokasi": {
+        "alamat": "Taman Mini Indonesia Indah (TMII), Ceger, Kec. Cipayung",
+        "kota": "Jakarta Timur",
+        "provinsi": "DKI Jakarta",
+        "kode_pos": "13820"
+      },
+      "tahun_pendirian": 2018,
+      "pengelola": "Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi (Kemendikbudristek)",
+      "kontak": {
+        "telepon": "+62 21 12345678",
+        "email": "info@museumbatik.kemdikbud.go.id",
+        "website": "https://museumbatik.kemdikbud.go.id"
+      },
+      "media_sosial": {
+        "instagram": "@museumbatik",
+        "facebook": "Museum Batik Indonesia",
+        "twitter": "@museumbatik"
+      }
     }
   },
-
   "jam_operasional": {
-    "hari_biasa": "08.00 - 16.00 WIB",
-    "akhir_pekan": "08.00 - 17.00 WIB",
-    "hari_libur_nasional": "Tutup",
-    "keterangan": "Jam operasional dapat berubah pada acara khusus"
+    "hari_biasa": "Senin - Jumat: 09.00 - 15.00 WIB",
+    "akhir_pekan": "Sabtu - Minggu: 08.00 - 16.00 WIB",
+    "hari_libur": "Tutup pada Hari Libur Nasional (kecuali ada pengumuman khusus)"
   },
-
   "harga_tiket": {
-    "anak_anak": 5000,
+    "dewasa": 15000,
     "pelajar_mahasiswa": 5000,
-    "dewasa": 10000,
-    "wisatawan_mancanegara": 20000,
-    "rombongan_min_20": 8000,
-    "gratis": "Anak di bawah 5 tahun",
-    "mata_uang": "IDR"
+    "anak_anak": 3000,
+    "wisatawan_mancanegara": 50000,
+    "gratis": "Anak di bawah 3 tahun dan Lansia (60+)",
+    "sistem_pembelian": "Tersedia pembelian tiket langsung (Offline) dan Online via website TMII.",
+    "kebijakan_refund": "Tiket yang sudah dibeli tidak dapat dikembalikan, namun dapat dijadwalkan ulang maksimal 1x24 jam sebelum kunjungan."
   },
-
-  "aturan_pengunjung": [
-    "Dilarang menyentuh koleksi tanpa izin",
-    "Dilarang membawa makanan dan minuman ke ruang pamer",
-    "Diperbolehkan mengambil foto tanpa flash",
-    "Anak-anak wajib didampingi orang dewasa",
-    "Menjaga kebersihan dan ketertiban museum"
-  ],
-
   "fasilitas": [
-    "Ruang pameran permanen",
-    "Ruang pameran temporer",
-    "Ruang edukasi dan workshop",
-    "Galeri sejarah batik",
-    "Perpustakaan batik",
-    "Toko suvenir",
+    "Area Parkir Luas",
+    "Toilet Bersih & Higienis",
     "Mushola",
-    "Toilet",
-    "Area parkir",
-    "Akses kursi roda"
+    "Ruang Pamer Tetap (Galeri Nusantara)",
+    "Ruang Pamer Temporer",
+    "Ruang Edukasi & Workshop Membatik",
+    "Toko Suvenir (Batik Shop)",
+    "Kantin / Area Istirahat",
+    "Akses Ramah Difabel (Ramp & Lift)"
   ],
-
-  "layanan": {
-    "edukasi": [
+  "sejarah_budaya": {
+    "pengertian": "Batik adalah kain bergambar yang pembuatannya secara khusus dengan menuliskan atau menerakan malam (lilin) pada kain itu, kemudian pengolahannya diproses dengan cara tertentu yang memiliki kekhasan.",
+    "unesco": "Batik Indonesia resmi diakui oleh UNESCO sebagai Masterpiece of the Oral and Intangible Heritage of Humanity pada tanggal 2 Oktober 2009.",
+    "sejarah_di_indonesia": "Tradisi membatik diperkirakan sudah ada sejak masa kerajaan Majapahit dan terus berkembang pada masa kerajaan Mataram Islam. Awalnya batik hanya digunakan oleh kalangan keraton, namun lambat laun menyebar ke masyarakat umum.",
+    "peran_budaya": "Batik hadir dalam setiap tahapan kehidupan manusia Indonesia, mulai dari gendongan bayi (kelahiran), pakaian pernikahan, hingga kain penutup jenazah (kematian)."
+  },
+  "teknik_pembuatan": {
+    "jenis_teknik": [
       {
-        "nama": "Workshop Membatik Tulis",
-        "durasi": "2 jam",
-        "biaya": 50000,
-        "peserta_minimal": 5
+        "nama": "Batik Tulis",
+        "deskripsi": "Teknik pembuatan batik menggunakan alat canting untuk menorehkan malam cair secara manual. Membutuhkan waktu 1-3 bulan pengerjaan.",
+        "nilai": "Sangat Tinggi (Eksklusif)"
       },
       {
-        "nama": "Workshop Batik Cap",
-        "durasi": "1.5 jam",
-        "biaya": 40000,
-        "peserta_minimal": 5
+        "nama": "Batik Cap",
+        "deskripsi": "Teknik menggunakan alat cap (biasanya tembaga) yang sudah bermotif untuk mencetak malam pada kain. Pengerjaan lebih cepat.",
+        "nilai": "Menengah"
       },
       {
-        "nama": "Tur Edukasi Berpemandu",
-        "durasi": "1 jam",
-        "biaya": 20000,
-        "peserta_minimal": 10
+        "nama": "Batik Kombinasi",
+        "deskripsi": "Perpaduan antara teknik tulis dan cap dalam satu kain untuk efisiensi namun tetap menjaga detail."
       }
     ],
-    "penelitian": [
-      "Akses arsip batik",
-      "Studi motif dan filosofi",
-      "Konsultasi kurator"
+    "alat_bahan": [
+      "Canting (alat tulis lilin)",
+      "Malam/Lilin (perintang warna)",
+      "Wajan & Kompor kecil",
+      "Gawangan (penyangga kain)",
+      "Kain Mori (katun/sutera)"
+    ],
+    "pewarnaan": "Menggunakan pewarna sintetis (Napthol, Indigosol) untuk warna cerah dan pewarna alami (Kulit kayu tinggi, daun nila) untuk warna klasik."
+  },
+  "koleksi_motif": [
+    {
+      "nama": "Parang",
+      "asal": "Yogyakarta & Solo",
+      "filosofi": "Melambangkan kesinambungan dan semangat yang tidak pernah padam (seperti ombak laut). Dahulu hanya boleh dipakai oleh raja dan ksatria.",
+      "warna_dominan": "Cokelat, Putih, Hitam (Sogan)",
+      "teknik": "Tulis",
+      "fungsi": "Upacara kenegaraan, simbol kekuasaan"
+    },
+    {
+      "nama": "Kawung",
+      "asal": "Yogyakarta & Jawa Tengah",
+      "filosofi": "Terinspirasi dari buah kolang-kaling, melambangkan kesucian, umur panjang, dan keadilan. Simbol empat penjuru mata angin (sedulur papat limo pancer).",
+      "warna_dominan": "Putih, Cokelat",
+      "teknik": "Tulis/Cap",
+      "fungsi": "Pakaian abdi dalem, upacara adat"
+    },
+    {
+      "nama": "Mega Mendung",
+      "asal": "Cirebon",
+      "filosofi": "Menggambarkan bentuk awan yang bergulung dengan gradasi warna (7 lapisan), melambangkan kesabaran dan kesejukan hati pemimpin yang harus bisa mengayomi.",
+      "warna_dominan": "Biru, Merah",
+      "teknik": "Tulis",
+      "fungsi": "Busana pesta, seni dekoratif"
+    },
+    {
+      "nama": "Lasem (Sekar Jagad Lasem)",
+      "asal": "Rembang, Jawa Tengah",
+      "filosofi": "Simbol akulturasi budaya Jawa dan Tionghoa. Warna merah darah ayam (getih pitik) yang khas melambangkan kebahagiaan dan keberuntungan.",
+      "warna_dominan": "Merah Marun, Krem",
+      "teknik": "Tulis Halus",
+      "fungsi": "Pakaian sehari-hari kalangan peranakan, koleksi seni"
+    },
+    {
+      "nama": "Sekar Jagad",
+      "asal": "Yogyakarta & Solo",
+      "filosofi": "Berasal dari kata 'kar' (peta) dan 'jagad' (dunia), melambangkan keanekaragaman nusantara dan keindahan dunia yang bersatu.",
+      "warna_dominan": "Warna-warni cerah atau Sogan",
+      "teknik": "Tulis",
+      "fungsi": "Busana pernikahan, simbol kecantikan"
+    }
+  ],
+  "pameran": {
+    "sedang_berlangsung": {
+      "judul": "Pesona Batik Pesisir Utara",
+      "tema": "Akulturasi Budaya dalam Warna",
+      "tanggal": "1 Januari 2024 - 30 Juni 2024",
+      "deskripsi": "Menampilkan koleksi langka batik Pekalongan, Cirebon, dan Lasem yang mendapat pengaruh budaya Eropa dan Tionghoa.",
+      "lokasi": "Ruang Pamer Temporer Lt. 1"
+    },
+    "arsip_pameran": [
+      {
+        "judul": "Batik Keraton: Keagungan Masa Lalu",
+        "tahun": 2023,
+        "koleksi_unggulan": "Kain Panjang Sultan HB IX"
+      }
     ]
   },
-
-  "teknik_pembuatan_batik": [
+  "program_edukasi": [
     {
-      "nama_teknik": "Batik Tulis",
-      "alat": ["canting", "malam", "kompor"],
-      "ciri": "Detail halus, pengerjaan lama",
-      "durasi_proses": "2 minggu - 3 bulan"
+      "nama": "Workshop Nyanting Dasar",
+      "deskripsi": "Belajar memegang canting dan membuat pola dasar pada kain sapu tangan.",
+      "durasi": "2 Jam",
+      "biaya": 50000,
+      "fasilitas": "Kain 30x30cm, Alat Pinjam, Hasil karya dibawa pulang"
     },
     {
-      "nama_teknik": "Batik Cap",
-      "alat": ["cap tembaga", "malam"],
-      "ciri": "Motif berulang, lebih cepat",
-      "durasi_proses": "2 - 5 hari"
-    },
-    {
-      "nama_teknik": "Batik Kombinasi",
-      "alat": ["canting", "cap tembaga"],
-      "ciri": "Detail dan efisien",
-      "durasi_proses": "1 - 2 minggu"
+      "nama": "Kunjungan Sekolah Edukatif",
+      "deskripsi": "Tur museum dipandu kurator + sesi nonton film dokumenter batik.",
+      "biaya": 10000,
+      "syarat": "Minimal 20 siswa (Reservasi H-3)"
     }
   ],
-
-  "jenis_batik": [
-    {
-      "nama": "Batik Keraton",
-      "ciri": "Warna sogan, motif filosofis",
-      "contoh": ["Parang", "Kawung"]
+  "rute_kunjungan": {
+    "kilat_30_menit": {
+      "nama": "Rute Kilat (Highlights)",
+      "deskripsi": "Fokus pada Ruang Utama: Lihat Replika Batik UNESCO, Batik Parang Barong, dan Area Canting Raksasa.",
+      "urutan": ["Lobi Utama", "Galeri UNESCO", "Zona Batik Keraton"]
     },
-    {
-      "nama": "Batik Pesisir",
-      "ciri": "Warna cerah, motif flora dan fauna",
-      "contoh": ["Mega Mendung", "Tujuh Rupa", "Lasem"]
+    "umum_1_jam": {
+      "nama": "Rute Wisatawan Umum",
+      "deskripsi": "Menjelajahi sejarah batik dari masa ke masa dan melihat keragaman motif nusantara.",
+      "urutan": ["Galeri Sejarah", "Zona Batik Pesisir", "Zona Batik Pedalaman", "Toko Souvenir"]
     },
-    {
-      "nama": "Batik Pedalaman",
-      "ciri": "Warna kalem dan simbolik",
-      "contoh": ["Truntum", "Sido Mukti"]
+    "edukasi_pelajar": {
+      "nama": "Rute Edukasi Pelajar",
+      "deskripsi": "Fokus pada proses pembuatan dan alat-alat batik untuk pembelajaran seni budaya.",
+      "urutan": ["Area Diorama Pembuatan Batik", "Koleksi Alat & Bahan", "Ruang Workshop", "Galeri Motif Nusantara"]
     }
-  ],
-
-  "koleksi_motif_batik": [
-    {
-      "id": "MB001",
-      "nama_motif": "Parang",
-      "asal_daerah": "Yogyakarta",
-      "jenis": "Batik Keraton",
-      "makna": "Kekuatan dan keteguhan hidup",
-      "penggunaan": "Upacara adat dan keraton"
-    },
-    {
-      "id": "MB002",
-      "nama_motif": "Kawung",
-      "asal_daerah": "Jawa Tengah",
-      "jenis": "Batik Keraton",
-      "makna": "Kesucian dan keadilan",
-      "penggunaan": "Busana adat"
-    },
-    {
-      "id": "MB003",
-      "nama_motif": "Mega Mendung",
-      "asal_daerah": "Cirebon",
-      "jenis": "Batik Pesisir",
-      "makna": "Kesabaran dan keteduhan hati",
-      "penggunaan": "Busana adat dan simbol kepemimpinan"
-    },
-    {
-      "id": "MB004",
-      "nama_motif": "Gentongan",
-      "asal_daerah": "Madura",
-      "jenis": "Batik Pesisir",
-      "makna": "Keberanian dan keteguhan",
-      "penggunaan": "Busana adat Madura"
-    },
-    {
-      "id": "MB005",
-      "nama_motif": "Truntum",
-      "asal_daerah": "Surakarta",
-      "jenis": "Batik Pedalaman",
-      "makna": "Cinta dan kesetiaan",
-      "penggunaan": "Pernikahan adat Jawa"
-    },
-    {
-      "id": "MB006",
-      "nama_motif": "Lasem",
-      "asal_daerah": "Rembang",
-      "jenis": "Batik Pesisir",
-      "makna": "Keberanian dan akulturasi budaya",
-      "penggunaan": "Busana harian"
-    },
-    {
-      "id": "MB007",
-      "nama_motif": "Sekar Jagad",
-      "asal_daerah": "Yogyakarta",
-      "jenis": "Batik Kombinasi",
-      "makna": "Keindahan dan keberagaman dunia",
-      "penggunaan": "Busana resmi"
-    },
-    {
-      "id": "MB008",
-      "nama_motif": "Batik Bali",
-      "asal_daerah": "Bali",
-      "jenis": "Batik Daerah",
-      "makna": "Keseimbangan manusia dan alam",
-      "penggunaan": "Upacara keagamaan"
-    }
-  ],
-
-  "event_museum": [
-    {
-      "nama_event": "Hari Batik Nasional",
-      "bulan": "Oktober",
-      "kegiatan": ["Pameran khusus", "Workshop gratis", "Talkshow batik"]
-    },
-    {
-      "nama_event": "Pameran Batik Nusantara",
-      "bulan": "Juni",
-      "kegiatan": ["Pameran koleksi langka", "Tur kurator"]
-    }
-  ]
+  }
 }
