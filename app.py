@@ -3,164 +3,137 @@ from groq import Groq
 import json
 import os
 
-# --- KONFIGURASI HALAMAN ---
+# --- 1. KONFIGURASI HALAMAN ---
 st.set_page_config(
     page_title="Asisten Museum Batik",
-    page_icon="🏛️",
+    page_icon="🏺", # Ikon Guci/Artefak Museum
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- API KEY (Ganti jika perlu) ---
+# --- 2. API KEY ---
 GROQ_API_KEY = "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"
 
-# --- FUNGSI LOAD DATA ---
+# --- 3. CUSTOM CSS ---
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
+    .stApp { background-color: #fdfbf7; color: #4a4a4a; font-family: 'Lato', sans-serif; }
+    
+    /* Sidebar */
+    [data-testid="stSidebar"] { background-color: #3e2723; border-right: 2px solid #8d6e63; }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 { color: #ffecb3 !important; font-family: 'Playfair Display', serif; }
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] div { color: #d7ccc8; }
+
+    /* Judul */
+    h1 { font-family: 'Playfair Display', serif; color: #3e2723; text-align: center; }
+    .subtitle { text-align: center; color: #8d6e63; font-style: italic; margin-bottom: 2rem; }
+
+    /* Chat Bubbles */
+    .stChatMessage[data-testid="stChatMessageUser"] { background-color: #efebe9; border-left: 5px solid #5d4037; }
+    .stChatMessage[data-testid="stChatMessageAssistant"] { background-color: #ffffff; border: 1px solid #e0e0e0; }
+    
+    /* Tombol */
+    .stButton > button { border-radius: 20px; border: 1px solid #5d4037; color: #5d4037; background: white; }
+    .stButton > button:hover { background: #5d4037; color: white; }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- 4. LOAD DATA ---
 @st.cache_data
 def load_data():
     file_path = 'dataset_museum_batik.json'
     if os.path.exists(file_path):
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            st.error(f"Error membaca file JSON: {e}")
-            return None
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
     return None
 
 museum_data = load_data()
 
-# --- SIDEBAR: INFORMASI UTAMA (Disesuaikan dengan Dataset Baru) ---
+# --- 5. SIDEBAR (DENGAN IKON BARU) ---
 with st.sidebar:
-    # Menggunakan Logo Default atau Gambar Batik
-    st.image("https://cdn-icons-png.flaticon.com/512/1909/1909704.png", width=80)
+    # IKON 1: Gunungan Wayang (Simbol Budaya Jawa/Batik)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Wayang_Gunungan.svg/1200px-Wayang_Gunungan.svg.png", width=120)
+    
+    st.title("Info Museum")
     
     if museum_data:
-        # Mengambil data dari struktur JSON baru yang bersarang
-        info_identitas = museum_data.get('informasi_umum', {}).get('identitas', {})
-        lokasi = info_identitas.get('lokasi', {})
-        jam = museum_data.get('jam_operasional', {})
+        info = museum_data.get('informasi_umum', {}).get('identitas', {})
         tiket = museum_data.get('harga_tiket', {})
-        
-        # Judul Nama Museum
-        nama_museum = info_identitas.get('nama', "Museum Batik")
-        st.header(nama_museum)
-        st.caption(f"Est. {info_identitas.get('tahun_pendirian', '-')}")
-        
-        st.divider()
 
-        # 1. Lokasi
-        st.subheader("📍 Lokasi")
-        alamat_lengkap = f"{lokasi.get('alamat')}, {lokasi.get('kota')}"
-        st.write(alamat_lengkap)
-        
-        # 2. Jam Buka
-        with st.expander("⏰ Jam Operasional"):
-            st.write(f"**Senin-Jumat:** {jam.get('hari_biasa', '-')}")
-            st.write(f"**Akhir Pekan:** {jam.get('akhir_pekan', '-')}")
-            st.caption(jam.get('hari_libur', ''))
+        st.markdown("---")
+        with st.expander("📍 Lokasi", expanded=True):
+            st.write(info.get('lokasi', {}).get('alamat', '-'))
 
-        # 3. Tiket
-        with st.expander("🎫 Harga Tiket"):
-            if 'dewasa' in tiket:
-                st.write(f"**Dewasa:** Rp{tiket['dewasa']:,}")
-            if 'pelajar_mahasiswa' in tiket:
-                st.write(f"**Pelajar:** Rp{tiket['pelajar_mahasiswa']:,}")
-            if 'wisatawan_mancanegara' in tiket:
-                st.write(f"**Asing:** Rp{tiket['wisatawan_mancanegara']:,}")
-            st.caption(f"Info: {tiket.get('kebijakan_refund', '-')}")
-            
-        # 4. Kontak Media Sosial
-        st.divider()
-        sosmed = info_identitas.get('media_sosial', {})
-        st.markdown(f"[Instagram]({sosmed.get('instagram', '#')}) | [Website]({info_identitas.get('kontak', {}).get('website', '#')})")
+        with st.expander("🎫 Tiket Masuk", expanded=True):
+            st.write(f"**Dewasa:** Rp{tiket.get('dewasa', 0):,}")
+            st.write(f"**Asing:** Rp{tiket.get('wisatawan_mancanegara', 0):,}")
 
-    else:
-        st.warning("⚠️ Data JSON belum dimuat dengan benar.")
-        st.stop()
+    st.markdown("---")
+    st.caption("© Museum Batik AI")
 
-# --- HALAMAN UTAMA ---
-st.title("🎨 Asisten Virtual Museum Batik")
-st.markdown(
-    """
-    <style>
-    .stChatMessage {border-radius: 10px;}
-    </style>
-    Selamat datang! Tanyakan tentang **koleksi motif**, **sejarah**, **rute kunjungan**, atau **jadwal workshop**.
-    """, 
-    unsafe_allow_html=True
-)
-st.divider()
+# --- 6. HEADER ---
+st.markdown("<h1>Asisten Museum Batik</h1>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>Eksplorasi Kekayaan Warisan Nusantara</p>", unsafe_allow_html=True)
 
-# Inisialisasi Klien Groq
-try:
-    client = Groq(api_key=GROQ_API_KEY)
-except Exception as e:
-    st.error(f"Error API Key: {e}")
+if not museum_data:
+    st.error("⚠️ Data JSON tidak ditemukan.")
     st.stop()
 
-# Inisialisasi Riwayat Chat
-if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Halo! Saya siap memandu Anda. Apakah Anda ingin rekomendasi rute kunjungan atau info tentang motif batik tertentu?"}
-    ]
+# --- 7. CHAT LOGIC ---
+client = Groq(api_key=GROQ_API_KEY)
 
-# Tampilkan Riwayat
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Quick Reply Icons
+if len(st.session_state.messages) == 0:
+    col1, col2, col3 = st.columns(3)
+    if col1.button("🎫 Cek Tiket"):
+        st.session_state.messages.append({"role": "user", "content": "Berapa harga tiket?"})
+    if col2.button("☁️ Motif Mega Mendung"): # Ikon Awan untuk Mega Mendung
+        st.session_state.messages.append({"role": "user", "content": "Jelaskan filosofi batik Mega Mendung."})
+    if col3.button("⚡ Rute Kilat"): # Ikon Petir untuk Cepat
+        st.session_state.messages.append({"role": "user", "content": "Rekomendasi rute kunjungan singkat."})
+
+# Render Chat (DENGAN AVATAR BARU)
 for message in st.session_state.messages:
-    avatar = "👤" if message["role"] == "user" else "🤖"
-    with st.chat_message(message["role"], avatar=avatar):
+    # IKON 2: Avatar Chat
+    if message["role"] == "user":
+        # Ikon User (Orang biasa)
+        avatar_icon = "🧑‍🎨" 
+    else:
+        # Ikon Bot (Menggunakan URL gambar Wayang/Blangkon style jika ada, atau emoji Pria Bersorban)
+        # Kita pakai URL gambar Wayang icon agar unik
+        avatar_icon = "https://cdn-icons-png.flaticon.com/512/3663/3663363.png" 
+        
+    with st.chat_message(message["role"], avatar=avatar_icon):
         st.markdown(message["content"])
 
-# --- LOGIKA CHAT ---
-if prompt := st.chat_input("Contoh: Buatkan rute kunjungan 1 jam..."):
-    # Simpan & Tampilkan Input User
+# --- 8. INPUT ---
+if prompt := st.chat_input("Tanyakan tentang batik..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="👤"):
+    with st.chat_message("user", avatar="🧑‍🎨"):
         st.markdown(prompt)
 
-    # Context Data (Konversi JSON ke String)
     data_str = json.dumps(museum_data, ensure_ascii=False)
-
-    # System Prompt yang dioptimalkan untuk struktur baru
-    system_prompt = f"""
-    Anda adalah Pemandu Cerdas Museum Batik Indonesia.
-    Gunakan data JSON berikut untuk menjawab pertanyaan pengunjung:
-    {data_str}
-
-    PANDUAN MENJAWAB:
-    1. **Identitas & Lokasi**: Ambil dari bagian 'informasi_umum' -> 'identitas'.
-    2. **Tiket & Jam**: Ambil dari 'harga_tiket' dan 'jam_operasional'.
-    3. **Koleksi & Motif**: Jika ditanya motif (misal: Parang, Mega Mendung), cari detailnya di array 'koleksi_motif'. Jelaskan filosofi dan asalnya.
-    4. **Rute Kunjungan**: Jika pengunjung bingung mau lihat apa, tawarkan opsi dari bagian 'rute_kunjungan' (misal: Rute Kilat 30 Menit atau Rute Edukasi).
-    5. **Teknik**: Jelaskan detail dari bagian 'teknik_pembuatan'.
+    system_prompt = f"Anda adalah Pemandu Museum Batik. Jawab berdasarkan: {data_str}. Gunakan bahasa sopan."
     
-    Gaya bahasa: Ramah, edukatif, dan membantu. Gunakan format Rupiah (Rp) untuk harga.
-    Jika data tidak ada di JSON, katakan "Maaf informasi tersebut belum tersedia di database museum kami."
-    """
-    
-    # Generate Jawaban
-    with st.chat_message("assistant", avatar="🤖"):
-        message_placeholder = st.empty()
-        full_response = ""
-        
-        try:
+    try:
+        with st.chat_message("assistant", avatar="https://cdn-icons-png.flaticon.com/512/3663/3663363.png"):
+            message_placeholder = st.empty()
+            full_response = ""
             stream = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    *st.session_state.messages[-5:] # Membawa konteks 5 chat terakhir
-                ],
-                temperature=0.5,
-                stream=True
+                messages=[{"role": "system", "content": system_prompt}, *st.session_state.messages[-5:]],
+                temperature=0.5, stream=True
             )
-            
             for chunk in stream:
                 if chunk.choices[0].delta.content:
-                    content = chunk.choices[0].delta.content
-                    full_response += content
+                    full_response += chunk.choices[0].delta.content
                     message_placeholder.markdown(full_response + "▌")
-            
             message_placeholder.markdown(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-            
-        except Exception as e:
-            st.error(f"Terjadi kesalahan koneksi: {e}")
+    except Exception as e:
+        st.error(f"Error: {e}")
