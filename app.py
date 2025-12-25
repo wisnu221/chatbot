@@ -4,7 +4,7 @@ from pyngrok import ngrok
 NGROK_AUTH_TOKEN = "37IBwFJFFCDX0jcYa7YZhLe9jQy_4P3KPbdPnJvNw8xa8efFf" 
 ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
-%%writefile app.py
+
 import streamlit as st
 from groq import Groq
 import json
