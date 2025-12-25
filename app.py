@@ -1,4 +1,4 @@
-!pip install -q streamlit groq pyngrok
+
 
 from pyngrok import ngrok
 NGROK_AUTH_TOKEN = "37IBwFJFFCDX0jcYa7YZhLe9jQy_4P3KPbdPnJvNw8xa8efFf" 
