@@ -5,70 +5,86 @@ import os
 
 # --- KONFIGURASI HALAMAN ---
 st.set_page_config(
-    page_title="Museum Batik Indonesia",
-    page_icon="🎨",
+    page_title="Museum Batik: Nuansa Alam",
+    page_icon="🌿",
     layout="wide"
 )
 
-# --- API KEY ---
-# (Menggunakan key yang Anda berikan sebelumnya agar langsung jalan)
+# --- API KEY (Hardcoded sesuai request) ---
 GROQ_API_KEY = "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"
 
-# --- CUSTOM CSS (TEMA BATIK) ---
+# --- CUSTOM CSS (TEMA COKLAT & HIJAU) ---
 st.markdown("""
     <style>
-    /* 1. Latar Belakang Utama (Warna Krem Kain Mori) */
+    /* 1. Latar Belakang Utama (Krem Kehijauan lembut) */
     .stApp {
-        background-color: #fdfcf0;
-        color: #3e2723;
+        background-color: #f1f8e9; 
+        color: #3e2723; /* Teks Cokelat Tua */
     }
 
-    /* 2. Sidebar (Warna Cokelat Tua Batik Sogan) */
+    /* 2. Sidebar (Hijau Tua Alami) */
     [data-testid="stSidebar"] {
-        background-color: #4e342e;
-        border-right: 5px solid #d7ccc8;
-    }
-    
-    /* Teks di Sidebar */
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span, [data-testid="stSidebar"] p {
-        color: #ffecb3 !important; /* Warna Emas */
-        font-family: 'Georgia', serif;
-    }
-
-    /* 3. Judul Utama */
-    h1 {
-        color: #3e2723;
-        font-family: 'Playfair Display', serif;
-        text-align: center;
-        border-bottom: 2px solid #8d6e63;
-        padding-bottom: 10px;
-    }
-
-    /* 4. Chat Bubbles */
-    /* Pesan User (Warna Cokelat Muda) */
-    .stChatMessage[data-testid="stChatMessageUser"] {
-        background-color: #d7ccc8;
-        border-radius: 15px;
-        border: 1px solid #a1887f;
-    }
-    
-    /* Pesan Asisten (Warna Emas Pucat) */
-    .stChatMessage[data-testid="stChatMessageAssistant"] {
-        background-color: #fff8e1;
-        border-radius: 15px;
-        border: 1px solid #ffecb3;
-    }
-
-    /* 5. Tombol */
-    .stButton>button {
-        background-color: #5d4037;
+        background-color: #33691e; /* Hijau Daun Tua */
         color: white;
+    }
+    
+    /* Teks di Sidebar (Putih Gading) */
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] span, [data-testid="stSidebar"] p {
+        color: #f1f8e9 !important;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* 3. Judul Utama (Cokelat Kayu) */
+    h1 {
+        color: #4e342e;
+        font-family: 'Georgia', serif;
+        text-align: center;
+        border-bottom: 3px solid #558b2f; /* Garis Bawah Hijau */
+        padding-bottom: 15px;
+    }
+    
+    /* Subjudul */
+    h3 {
+        color: #558b2f; /* Hijau Cerah */
+    }
+
+    /* 4. Chat Bubbles (Balon Percakapan) */
+    
+    /* User (Hijau Muda Segar) */
+    .stChatMessage[data-testid="stChatMessageUser"] {
+        background-color: #dcedc8;
+        border: 1px solid #aed581;
+        border-radius: 20px 20px 0px 20px;
+    }
+    
+    /* Assistant (Cokelat Muda Hangat) */
+    .stChatMessage[data-testid="stChatMessageAssistant"] {
+        background-color: #efebe9;
+        border: 1px solid #d7ccc8;
+        border-radius: 20px 20px 20px 0px;
+    }
+
+    /* 5. Tombol Input & Send */
+    .stButton>button {
+        background-color: #4e342e; /* Tombol Cokelat */
+        color: white;
+        border-radius: 8px;
+        border: none;
+    }
+    .stButton>button:hover {
+        background-color: #6d4c41; /* Cokelat lebih terang saat hover */
+    }
+    
+    /* 6. Info Box/Expander */
+    .streamlit-expanderHeader {
+        background-color: #c5e1a5; /* Hijau Pastel */
+        color: #33691e;
         border-radius: 5px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- LOAD DATA ---
+# --- LOAD DATASET ---
 @st.cache_data
 def load_data():
     if os.path.exists('dataset_museum_batik.json'):
@@ -78,64 +94,58 @@ def load_data():
 
 museum_data = load_data()
 
-# --- SIDEBAR CONTENT ---
+# --- SIDEBAR (INFO MUSEUM) ---
 with st.sidebar:
-    # Menambahkan Gambar Batik (URL Publik)
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Batik_Parang_Klitik.jpg/220px-Batik_Parang_Klitik.jpg", use_container_width=True)
-    
-    st.title("🏛️ Info Praktis")
+    st.title("🌿 Museum Info")
+    st.markdown("---")
     
     if museum_data:
-        st.markdown("---")
         st.subheader("📍 Lokasi")
-        st.write(museum_data['informasi_umum']['lokasi']['alamat'])
+        st.caption(museum_data['informasi_umum']['lokasi']['alamat'])
         
         st.markdown("---")
-        with st.expander("🎫 Harga Tiket", expanded=True):
-            st.write(f"**Dewasa:** Rp{museum_data['harga_tiket']['dewasa']:,}")
-            st.write(f"**Mancanegara:** Rp{museum_data['harga_tiket']['wisatawan_mancanegara']:,}")
-            st.write(f"**Anak-anak:** Rp{museum_data['harga_tiket']['anak_anak']:,}")
+        
+        with st.expander("🎫 Tiket Masuk", expanded=True):
+            st.markdown(f"**Dewasa:** \nRp{museum_data['harga_tiket']['dewasa']:,}")
+            st.markdown(f"**Pelajar:** \nRp{museum_data['harga_tiket']['pelajar_mahasiswa']:,}")
+            st.markdown(f"**Asing:** \nRp{museum_data['harga_tiket']['wisatawan_mancanegara']:,}")
         
         st.markdown("---")
-        st.caption("© Museum Batik Indonesia AI")
+        st.info("💡 **Tips:** Tanyakan tentang 'Motif Semen' atau 'Batik Pesisir'.")
 
-# --- MAIN CONTENT ---
-st.title("🌸 Asisten Virtual Museum Batik")
-st.markdown("<p style='text-align: center; color: #5d4037;'><em>Bertanya seputar koleksi, filosofi motif, dan layanan museum.</em></p>", unsafe_allow_html=True)
+# --- MAIN PAGE ---
+st.title("Asisten Batik Nusantara")
+st.markdown("<div style='text-align: center;'><em>Menjelajahi Keindahan Warisan Budaya dengan Nuansa Alam</em></div>", unsafe_allow_html=True)
+st.divider()
 
 if not museum_data:
-    st.error("⚠️ File 'dataset_museum_batik.json' belum diunggah ke GitHub!")
+    st.error("⚠️ Data museum tidak ditemukan. Mohon cek file JSON di GitHub.")
     st.stop()
 
-# Inisialisasi Groq
+# --- LOGIKA CHATBOT ---
 client = Groq(api_key=GROQ_API_KEY)
 
-# Session State Chat
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Sugeng Rawuh! 🙏 Saya asisten Museum Batik. Ada yang ingin Anda tanyakan tentang motif Batik atau jadwal workshop?"}
+        {"role": "assistant", "content": "Halo! Saya siap menemani Anda menjelajahi dunia Batik. Ada yang ingin ditanyakan?"}
     ]
 
-# Tampilkan Chat
+# Render Chat
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Input Chat
-if prompt := st.chat_input("Contoh: Apa makna motif Parang?"):
+# Input User
+if prompt := st.chat_input("Tulis pertanyaan Anda di sini..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # System Prompt
+    # Prompt System
     system_prompt = f"""
-    Kamu adalah pemandu wisata digital Museum Batik Indonesia yang sopan dan berwawasan luas.
-    Gunakan data berikut untuk menjawab: {json.dumps(museum_data)}
-    
-    Gaya Bicara:
-    - Gunakan bahasa Indonesia yang baik, sedikit formal namun ramah.
-    - Jika relevan, gunakan sapaan sopan.
-    - Jelaskan filosofi batik dengan mendalam jika ditanya.
+    Anda adalah pemandu museum yang ramah dan mencintai budaya.
+    Jawablah pertanyaan berdasarkan data berikut: {json.dumps(museum_data)}
+    Gunakan bahasa yang santai namun sopan.
     """
     
     try:
@@ -151,4 +161,4 @@ if prompt := st.chat_input("Contoh: Apa makna motif Parang?"):
             st.markdown(response_text)
             st.session_state.messages.append({"role": "assistant", "content": response_text})
     except Exception as e:
-        st.error(f"Terjadi kesalahan koneksi: {e}")
+        st.error(f"Koneksi terputus: {e}")
