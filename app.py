@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # --- API KEY (Ganti jika perlu) ---
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 
 # --- FUNGSI LOAD DATA ---
 @st.cache_data
